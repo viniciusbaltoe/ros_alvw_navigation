@@ -18,16 +18,17 @@ class RobotNavigator(Node):
 
     def laser_callback(self, laser_data):
         self.get_logger().debug("RobotNavigator node initialized")
-
+        
         # Faz a verificação das ditâncias do scan do tópico /scan
-        if min(laser_data.ranges) > 1:
-            self.get_logger().info('Moving forward. Min Range: {:.2f}'.format(min(laser_data.ranges)))
-            self.cmd_vel.linear.x  = 1.0
+        min_range = min(laser_data.ranges)
+        if min_range > 0.25:  
+            # Navega para frente se a distância é maior que 0.2 metros
+            self.cmd_vel.linear.x = 0.4
             self.cmd_vel.angular.z = 0.0
         else:
-            self.get_logger().info('Obstacle detected, stopping. Min Range: {:.2f}'.format(min(laser_data.ranges)))
-            self.cmd_vel.linear.x  = 0.0
-            self.cmd_vel.angular.z = 0.0
+            # Gira para a esquerda se a distância é menor que 0.2 metros
+            self.cmd_vel.linear.x = 0.0
+            self.cmd_vel.angular.z = 0.5
 
         # publica a velocidade no tópico /cmd_vel
         self.velocity_publisher.publish(self.cmd_vel)
