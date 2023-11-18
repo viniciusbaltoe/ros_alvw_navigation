@@ -47,36 +47,40 @@ class RobotNavigator(Node):
             angle = angle_min + index * angle_increment # radianos
 
             # Obstáculo está a frente do robô
-            if  (angle > 2*math.pi * 7/8) or (angle < 2*math.pi * 1/8):
+            if  (angle > 2*math.pi * 7/8) or (angle <= 2*math.pi * 1/8):
                 self.get_logger().info("frente")
                 print(angle)
-                # O robô vai recuar virando para a esquerda
+                # O robô vai recuar virando para a esquerda para começar a girar
+                # no sentido anti-horário
                 self.cmd_vel.linear.x = -0.2
-                self.cmd_vel.angular.z = -0.5 # Negativo  = volante para direita
+                self.cmd_vel.angular.z = 0.5 
+
+            # Obstáculo está atras do robô
+            elif  (angle > 2*math.pi * 3/8) and (angle <= 2*math.pi * 5/8):
+                self.get_logger().info("tras")
+                print(angle)
+                # O robô vai avançar virando para a esquerda
+                self.cmd_vel.linear.x = 0.2
+                self.cmd_vel.angular.z = 0.5            
             
             # Obstáculo está a esquerda do robô
-            elif  (angle > 2*math.pi * 1/8) and (angle < 2*math.pi * 3/8):
+            elif  (angle > 2*math.pi * 1/8) and (angle <= 2*math.pi * 3/8):
                 self.get_logger().info("esquerda")
                 print(angle)
                 # O robô vai girar para a direita
-                self.cmd_vel.linear.x =  0.1
-                self.cmd_vel.angular.z = -0.5 # Negativo  = volante para direita 
+                self.cmd_vel.linear.x =  0.2
+                self.cmd_vel.angular.z = -0.5
             
-            # Obstáculo está atras do robô
-            elif  (angle > 2*math.pi * 3/8) and (angle < 2*math.pi * 5/8):
-                self.get_logger().info("tras")
+
+
+            # Obstáculo está a direita do robô
+            else:# (angle > 2*math.pi * 7/8) and (angle <= 2*math.pi * 1/8):
+                self.get_logger().info("direita")
                 print(angle)
                 # O robô vai avançar virando para a esquerda
                 self.cmd_vel.linear.x = 0.2
                 self.cmd_vel.angular.z = 0.5
 
-            # Obstáculo está a direita do robô
-            else:#  (angle > 2*math.pi * 7/8) and (angle < 2*math.pi * 1/8):
-                self.get_logger().info("direita")
-                print(angle)
-                # O robô vai avançar virando para a esquerda
-                self.cmd_vel.linear.x = 0.1
-                self.cmd_vel.angular.z = 0.5
                       
         self.velocity_publisher.publish(self.cmd_vel)
 
