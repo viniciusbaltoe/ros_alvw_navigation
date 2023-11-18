@@ -29,7 +29,7 @@ class TurtleBotController:
         while rclpy.ok():
             self.velocity_publisher.publish(self.cmd_vel)
 
-if __name__ == '__main__':
+def main():
     rclpy.init()
     try:
         turtlebot_controller = TurtleBotController()
@@ -39,3 +39,6 @@ if __name__ == '__main__':
     finally:
         turtlebot_controller.node.destroy_node()
         rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()

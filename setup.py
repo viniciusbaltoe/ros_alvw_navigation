@@ -15,11 +15,12 @@ setup(
     zip_safe=True,
     maintainer='vinicius',
     maintainer_email='viniciusbaltoe@gmail.com',
-    description='TODO: Package description',
+    description='Node de navegação do robô.',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'navigation = ros_alvw_navigation.navigation:main',
         ],
     },
 )
