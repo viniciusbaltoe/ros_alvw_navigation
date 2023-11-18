@@ -17,13 +17,15 @@ class TurtleBotController:
     def laser_callback(self, laser_data):
         # Implement your logic based on laser data to decide the linear and angular velocity
         # For simplicity, let's move forward if there are no obstacles in front
-        if min(laser_data.ranges) > 0.5:
-            self.cmd_vel.linear.x = 0.2  # Set linear velocity
+        if min(laser_data.ranges) > 0.1:
+            self.cmd_vel.linear.x  = 1.0  # Set linear velocity
             self.cmd_vel.angular.z = 0.0  # Set angular velocity
         else:
             # If obstacle is detected, stop
-            self.cmd_vel.linear.x = 0.0
+            self.cmd_vel.linear.x  = 0.0
             self.cmd_vel.angular.z = 0.0
+        self.cmd_vel.linear.x  = 1.0
+        self.cmd_vel.angular.z = 0.0
 
     def move_turtlebot(self):
         while rclpy.ok():
