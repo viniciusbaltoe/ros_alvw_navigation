@@ -1,12 +1,14 @@
 import rclpy
+from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
-class TurtleBotController:
+class RobotNavigator(Node):
+
     def __init__(self):
-        self.node = rclpy.create_node('turtlebot_controller')
-        self.velocity_publisher = self.node.create_publisher(Twist, '/cmd_vel', 10)
-        self.laser_subscriber = self.node.create_subscription(
+        super().__init__('robot_navigator')
+        self.velocity_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.laser_subscriber = self.create_subscription(
             LaserScan,
             '/scan',
             self.laser_callback,
@@ -15,32 +17,27 @@ class TurtleBotController:
         self.cmd_vel = Twist()
 
     def laser_callback(self, laser_data):
-        # Implement your logic based on laser data to decide the linear and angular velocity
-        # For simplicity, let's move forward if there are no obstacles in front
-        if min(laser_data.ranges) > 0.1:
-            self.cmd_vel.linear.x  = 1.0  # Set linear velocity
-            self.cmd_vel.angular.z = 0.0  # Set angular velocity
+        self.get_logger().debug("RobotNavigator node initialized")
+
+        # Faz a verificação das ditâncias do scan do tópico /scan
+        if min(laser_data.ranges) > 1:
+            self.get_logger().info('Moving forward. Min Range: {:.2f}'.format(min(laser_data.ranges)))
+            self.cmd_vel.linear.x  = 1.0
+            self.cmd_vel.angular.z = 0.0
         else:
-            # If obstacle is detected, stop
+            self.get_logger().info('Obstacle detected, stopping. Min Range: {:.2f}'.format(min(laser_data.ranges)))
             self.cmd_vel.linear.x  = 0.0
             self.cmd_vel.angular.z = 0.0
-        self.cmd_vel.linear.x  = 1.0
-        self.cmd_vel.angular.z = 0.0
 
-    def move_turtlebot(self):
-        while rclpy.ok():
-            self.velocity_publisher.publish(self.cmd_vel)
+        # publica a velocidade no tópico /cmd_vel
+        self.velocity_publisher.publish(self.cmd_vel)
 
 def main():
     rclpy.init()
-    try:
-        turtlebot_controller = TurtleBotController()
-        turtlebot_controller.move_turtlebot()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        turtlebot_controller.node.destroy_node()
-        rclpy.shutdown()
+    robot_navigator = RobotNavigator()
+    rclpy.spin(robot_navigator)
+    robot_navigator.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
