@@ -14,6 +14,11 @@ git clone git@github.com:viniciusbaltoe/ros_alvw_navigation.git
 
 * Retorne ao diretório do WorkSpace (ros2_ws) e faça a atualização do colcon:
 
-cd ..
+cd ~/ros2_ws && colcon build && source install/setup.bash
 
-colcon build
+
+## Debug
+
+* Exemplo de publicação de velocidade em um tópico direto do terminal:
+
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}"
