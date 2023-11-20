@@ -44,18 +44,18 @@ class RobotNavigator(Node):
             angle_increment = laser_data.angle_increment
             index = laser_data.ranges.index(min_range)
             # O obstáculo está na coordenada polar (angle, distance)
-            angle = angle_min + index * angle_increment + math.pi/2 # radianos
+            angle = (angle_min + index * angle_increment) + math.pi/2 # radianos
 
 
-            if math.sin(angle) > 0:
-                self.cmd_vel.linear.x = - 0.2
+            if math.sin(angle) > 0: # Obstáculo na frente
+                self.cmd_vel.linear.x = - 0.3
                 # Como o angulo na frente o robô é zero (0), eu somei pi/2 para ficar igual ao circulo trigonometrico
-                # O "/2" foi uma tentativa de reduzir a sensibilidade e fazer ele curvar menos.
-                self.cmd_vel.angular.z = -1 * math.sin(angle) /2 #* math.cos(angle)
+                # O "/5" foi uma tentativa de reduzir a sensibilidade e fazer ele curvar menos.
+                self.cmd_vel.angular.z = -1 * math.sin(angle) /5 #* math.cos(angle)
 
-            else:
-                self.cmd_vel.linear.x = 0.2
-                self.cmd_vel.angular.z = math.sin(angle)  /2#* math.cos(angle)
+            else:                   # Obstáculo atras
+                self.cmd_vel.linear.x = 0.3
+                self.cmd_vel.angular.z = math.sin(angle)  /5#* math.cos(angle)
             
 
             # # Obstáculo está a frente do robô
