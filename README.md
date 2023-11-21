@@ -25,7 +25,7 @@ ros2 run ros_alvw_navigation navigation
 ```
 * Inicialização de um dos mundos construídos no gazebo e do node de navegação utilizando launch'file:
 ```
-ros2 launch ros_alvw_navigation robot_navigation_launch.py model:=waffle x_pos:=-3.0 y_pos:=1.0 z_pos:=0.0
+ros2 launch ros_alvw_navigation robot_navigation_launch.py map_file:=/caminho/do/seu/mapa.yaml initial_pose:="x:=1.0 y:=2.0 z:=0.0"
 ```
 
 ## Debug

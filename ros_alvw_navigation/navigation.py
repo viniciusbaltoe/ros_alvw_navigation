@@ -9,7 +9,7 @@ import time
 class RobotNavigator(Node):
 
     def __init__(self):
-        super().__init__('robot_navigator')
+        super().__init__('navigation')
         self.velocity_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.laser_subscriber = self.create_subscription(
             LaserScan,
@@ -85,9 +85,9 @@ class RobotNavigator(Node):
 
 def main():
     rclpy.init()
-    robot_navigator = RobotNavigator()
-    rclpy.spin(robot_navigator)
-    robot_navigator.destroy_node()
+    navigation = RobotNavigator()
+    rclpy.spin(navigation)
+    navigation.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
