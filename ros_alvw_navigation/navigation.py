@@ -20,15 +20,12 @@ class RobotNavigator(Node):
         self.cmd_vel = Twist()
 
     def laser_callback(self, laser_data):
-        #self.cmd_vel.linear.x = 0.0
-        #self.cmd_vel.angular.z = 0.0
-
-        self.get_logger().info("RobotNavigator node initialized")
+        #self.get_logger().info("RobotNavigator node initialized")
 
         min_range = min(laser_data.ranges)
         front_range = laser_data.ranges[0]
 
-        if min_range > 0.3: # and front_range > 0.7:
+        if min_range > 0.28: # and front_range > 0.7:
             near_flag = False # Nada próximo 
         else:
             near_flag = True  # Algo próximo
@@ -51,11 +48,15 @@ class RobotNavigator(Node):
                 self.cmd_vel.linear.x = - 0.3
                 # Como o angulo na frente o robô é zero (0), eu somei pi/2 para ficar igual ao circulo trigonometrico
                 # O "/5" foi uma tentativa de reduzir a sensibilidade e fazer ele curvar menos.
-                self.cmd_vel.angular.z = -1 * math.sin(angle) /5 #* math.cos(angle)
+                self.cmd_vel.angular.z = -1 * math.sin(angle) /3 #* math.cos(angle)
+
+                if math.cos(angle) > 0.7 and front_range > 0.7:
+                    self.cmd_vel.linear.x = 0.3
+                    self.cmd_vel.angular.z = 0.0
 
             else:                   # Obstáculo atras
                 self.cmd_vel.linear.x = 0.3
-                self.cmd_vel.angular.z = math.sin(angle)  /5#* math.cos(angle)
+                self.cmd_vel.angular.z = math.sin(angle)  /3#* math.cos(angle)
             
 
             # # Obstáculo está a frente do robô

@@ -25,7 +25,7 @@ ros2 run ros_alvw_navigation navigation
 ```
 * Inicialização de um dos mundos construídos no gazebo e do node de navegação utilizando launchfile:
 ```
-ros2 launch ros_alvw_navigation navigation_launch.py headless:=False x_pose:=2.0 y_pose:=1.0
+ros2 launch ros_alvw_navigation navigation_all_launch.py headless:=False x_pose:=2.0 y_pose:=1.0
 ```
 
 ## Debug
