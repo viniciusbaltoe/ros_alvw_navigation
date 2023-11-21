@@ -15,6 +15,7 @@
 """This is all-in-one launch script intended for use by nav2 developers."""
 
 import os
+import random
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -55,9 +56,15 @@ def generate_launch_description():
     #use_rviz = LaunchConfiguration('use_rviz')
     headless = LaunchConfiguration('headless', default=False)
     world = LaunchConfiguration('world')
+    
+    x = random.randrange(-10,10)
+    y= random.randrange(-10,10)
+    x_pose = LaunchConfiguration('x_pose', default=x/10)
+    y_pose = LaunchConfiguration('y_pose', default=y/10)
+
     pose = {
-        'x': LaunchConfiguration('x_pose', default='-2.00'),
-        'y': LaunchConfiguration('y_pose', default='-0.50'),
+        'x': LaunchConfiguration('x_pose', default=x_pose),
+        'y': LaunchConfiguration('y_pose', default=y_pose),
         'z': LaunchConfiguration('z_pose', default='0.01'),
         'R': LaunchConfiguration('roll', default='0.00'),
         'P': LaunchConfiguration('pitch', default='0.00'),
