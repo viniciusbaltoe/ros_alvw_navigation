@@ -3,7 +3,7 @@ import os
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import Command, LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
@@ -23,8 +23,20 @@ def generate_launch_description():
         launch_arguments = gazebo_launch_args.items(),
     )
     
-    
     robot_name = 'waffle'
+
+    # Use the path to the URDF file of the TurtleBot3
+    robot_description_path = os.path.join(get_package_share_directory('turtlebot3_description'), 'urdf', 'turtlebot3_waffle.urdf')
+
+    # Node to load the URDF description into the ROS parameter server
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        parameters=[{'use_sim_time': use_sim_time,
+                     'robot_description': Command(['xacro ', robot_description_path, ' robot_name:=', robot_name])}],
+        output='screen',
+    )
 
     spawn_robot = Node(
         package='gazebo_ros',
@@ -42,7 +54,8 @@ def generate_launch_description():
         emulate_tty=True,  # Permite a exibição de mensagens de log no terminal
     )
     return LaunchDescription([
-        gazebo,
         spawn_robot,
+        gazebo,
+        robot_state_publisher,
         navigation,
        ])
