@@ -325,9 +325,9 @@ def generate_launch_description():
     ld.add_action(start_robot_state_publisher_cmd)
     #ld.add_action(rviz_cmd)
     ld.add_action(bringup_cmd)
-    ld.add_action(navigation)
-    ld.add_action(cartographer)
-    ld.add_action(analise)
+    #ld.add_action(navigation)
+    #ld.add_action(cartographer)
+    #ld.add_action(analise)
 
 
     return ld

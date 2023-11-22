@@ -2,9 +2,8 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Bool
 
-import math
-import time
 
 class RobotNavigator(Node):
 
@@ -12,6 +11,7 @@ class RobotNavigator(Node):
         super().__init__('robot_navigator')
         self.get_logger().info("RobotNavigator node initialized")
         self.velocity_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.pose_subscriber = self.create_subscription(Bool, "stop", self.get_stop, 10)
         self.laser_subscriber = self.create_subscription(
             LaserScan,
             '/scan',
@@ -53,6 +53,10 @@ class RobotNavigator(Node):
 
         self.velocity_publisher.publish(self.cmd_vel)
 
+    def get_stop(self, msg):
+        if msg.data == True:
+            self.get_logger().info("Cartographer node has been stopped")
+            rclpy.shutdown()
 
 
 def main():
