@@ -29,8 +29,8 @@ setup(
     entry_points={
         'console_scripts': [
             'navigation = ros_alvw_navigation.navigation:main',
-            'forward = ros_alvw_navigation.move_forward:main'
-            'analise = ros_alvw_navigation.analise:main'
+            'forward = ros_alvw_navigation.move_forward:main',
+            'analise = ros_alvw_navigation.analise:main',
             'cartographer = ros_alvw_navigation.cartographer:main'
         ],
     },

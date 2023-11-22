@@ -33,9 +33,13 @@ cd ~/ros2_ws && colcon build && source install/setup.bash
 ```
 ros2 run ros_alvw_navigation navigation
 ```
-* Inicialização de um dos mundos construídos no gazebo e do node de navegação utilizando launchfile:
+* Inicialização de um dos mundos construídos no gazebo:
 ```
-ros2 launch ros_alvw_navigation navigation_all_launch.py headless:=False x_pose:=2.0 y_pose:=1.0
+ros2 launch ros_alvw_navigation gazebo_launch.py headless:=False x_pose:=2.0 y_pose:=1.0
+```
+* Inicialização do node de navegação e identificação de obstáculos:
+```
+ros2 launch ros_alvw_navigation navigation_launch.py
 ```
 
 ## Debug
