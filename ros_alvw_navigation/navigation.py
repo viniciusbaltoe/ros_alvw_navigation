@@ -9,7 +9,8 @@ import time
 class RobotNavigator(Node):
 
     def __init__(self):
-        super().__init__('navigation')
+        super().__init__('robot_navigator')
+        self.get_logger().info("RobotNavigator node initialized")
         self.velocity_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.laser_subscriber = self.create_subscription(
             LaserScan,
@@ -20,75 +21,45 @@ class RobotNavigator(Node):
         self.cmd_vel = Twist()
 
     def laser_callback(self, laser_data):
-        #self.get_logger().info("RobotNavigator node initialized")
+        ranges_n = laser_data.ranges[:10] + laser_data.ranges[350:]
+        ranges_ne = laser_data.ranges[10:45]
+        ranges_nw = laser_data.ranges[315:350]
+        ranges_e = laser_data.ranges[45:90]
+        ranges_w = laser_data.ranges[270:315]
+        min_range_n = min(ranges_n)
+        min_range_ne = min(ranges_ne)
+        min_range_nw = min(ranges_nw)
+        min_range_e = min(ranges_e)
+        min_range_w = min(ranges_w)
 
-        min_range = min(laser_data.ranges)
-        front_range = laser_data.ranges[0]
-
-        if min_range > 0.28: # and front_range > 0.7:
-            near_flag = False # Nada próximo 
+        if min_range_n < 0.6: # se tiver obstáculo próximo a frente
+            self.cmd_vel.linear.x = -0.2
+            self.cmd_vel.angular.z = -0.5
+        elif min_range_ne < 0.8: # se o obstáculo estiver do lado direito
+            self.cmd_vel.linear.x = 0.2
+            self.cmd_vel.angular.z = -0.6
+        elif min_range_nw < 0.8: # se o obstáculo estiver do lado esquerdo
+            self.cmd_vel.linear.x = 0.2
+            self.cmd_vel.angular.z = 0.6
+        elif min_range_e < 0.2:
+            self.cmd_vel.linear.x = 0.1
+            self.cmd_vel.angular.z = -0.5
+        elif min_range_w < 0.2:
+            self.cmd_vel.linear.x = 0.1
+            self.cmd_vel.angular.z = 0.5
         else:
-            near_flag = True  # Algo próximo
-
-        if not near_flag:
-            # Navega para frente
-            # self.get_logger().info("Vai para frente")
-            self.cmd_vel.linear.x = 0.3
+            self.cmd_vel.linear.x = 0.2
             self.cmd_vel.angular.z = 0.0
-        else:
-            # Verifica a direção do obstáculo
-            angle_min = laser_data.angle_min
-            angle_increment = laser_data.angle_increment
-            index = laser_data.ranges.index(min_range)
-            # O obstáculo está na coordenada polar (angle, distance)
-            angle = (angle_min + index * angle_increment) + math.pi/2 # radianos
 
-
-            if math.sin(angle) > 0: # Obstáculo na frente
-                self.cmd_vel.linear.x = - 0.3
-                # Como o angulo na frente o robô é zero (0), eu somei pi/2 para ficar igual ao circulo trigonometrico
-                # O "/5" foi uma tentativa de reduzir a sensibilidade e fazer ele curvar menos.
-                self.cmd_vel.angular.z = -1 * math.sin(angle) /3 #* math.cos(angle)
-
-                if math.cos(angle) > 0.7 and front_range > 0.7:
-                    self.cmd_vel.linear.x = 0.3
-                    self.cmd_vel.angular.z = 0.0
-
-            else:                   # Obstáculo atras
-                self.cmd_vel.linear.x = 0.3
-                self.cmd_vel.angular.z = math.sin(angle)  /3#* math.cos(angle)
-            
-
-            # # Obstáculo está a frente do robô
-            # if  (angle > 2*math.pi * 7/8) or (angle <= 2*math.pi * 1/8):
-            #     self.cmd_vel.linear.x = -0.2
-            #     self.cmd_vel.angular.z = 0.5 
-
-            # # Obstáculo está atras do robô
-            # elif  (angle > 2*math.pi * 3/8) and (angle <= 2*math.pi * 5/8):
-            #     self.cmd_vel.linear.x = 0.2
-            #     self.cmd_vel.angular.z = 0.5            
-            
-            # # Obstáculo está a esquerda do robô
-            # elif  (angle > 2*math.pi * 1/8) and (angle <= 2*math.pi * 3/8):
-            #     self.cmd_vel.linear.x =  0.2
-            #     self.cmd_vel.angular.z = -0.5
-
-            # # Obstáculo está a direita do robô
-            # else:# (angle > 2*math.pi * 7/8) and (angle <= 2*math.pi * 1/8):
-            #     self.cmd_vel.linear.x = 0.2
-            #     self.cmd_vel.angular.z = 0.5
-
-                      
         self.velocity_publisher.publish(self.cmd_vel)
 
 
 
 def main():
     rclpy.init()
-    navigation = RobotNavigator()
-    rclpy.spin(navigation)
-    navigation.destroy_node()
+    robot_navigator = RobotNavigator()
+    rclpy.spin(robot_navigator)
+    robot_navigator.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
