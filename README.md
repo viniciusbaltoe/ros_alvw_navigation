@@ -1,7 +1,17 @@
 # ros_alvw_navigation
 
-Pacote ROS referente ao segundo trabalho de Robôs Autônomos.
+[![ROS2](https://img.shields.io/badge/ROS2-Humble-green)](https://docs.ros.org/en/humble/index.html)
+[![Python](https://img.shields.io/badge/Python-v3.7-blue)](https://www.python.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-v22.04.4-red)](https://ubuntu.com/download)
+[![Gazebo](https://img.shields.io/badge/Gazebo-vX-orange)](https://gazebosim.org/docs)
 
+## Sobre
+
+Este projeto investiga os fundamentos da percepção ao empregar um sistema robótico para a execução de uma tarefa específica: identificar e contar obstáculos em um ambiente.
+
+## Motivação
+
+O impulso central deste empreendimento reside na aplicação prática dos conhecimentos teóricos adquiridos durante as aulas da disciplina de Robôs Autônomos ministradas pelo Prof. Dr. Ricardo Carminati de Mello, na Universidade Federal do Espírito Santo (UFES), visando a solução de problemas no campo da robótica. Além disso, o projeto em desenvolvimento tem o potencial de ser implementado em um robô real, aprimorando seu processo de percepção e ampliando a extração de informações do ambiente, como a contagem precisa de obstáculos. Essas informações podem ser aplicadas para verificar a densidade de obstáculos no ambiente, bem como estimar suas posições no referencial global.
 ## Procedimentos para a instalação do pacote
 
 * No terminal, abra a area de trabalho ROS (ros2_ws), e em seguida o diretório src:
