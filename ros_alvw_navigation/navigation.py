@@ -55,6 +55,9 @@ class RobotNavigator(Node):
 
     def get_stop(self, msg):
         if msg.data == True:
+            self.cmd_vel.linear.x = 0.0
+            self.cmd_vel.angular.z = 0.0
+            self.velocity_publisher.publish(self.cmd_vel)
             self.get_logger().info("Cartographer node has been stopped")
             rclpy.shutdown()
 
