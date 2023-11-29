@@ -3,7 +3,7 @@
 [![ROS2](https://img.shields.io/badge/ROS2-Humble-green)](https://docs.ros.org/en/humble/index.html)
 [![Python](https://img.shields.io/badge/Python-v3.7-blue)](https://www.python.org/)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-v22.04.4-red)](https://ubuntu.com/download)
-[![Gazebo](https://img.shields.io/badge/Gazebo-vX-orange)](https://gazebosim.org/docs)
+[![Gazebo](https://img.shields.io/badge/Gazebo-v11.10-orange)](https://gazebosim.org/docs)
 
 ## Sobre
 
